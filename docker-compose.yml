@@ -1,0 +1,24 @@
+version: '3'
+services:
+  # the docker equivalent for web service below is:
+  # 'docker build -f Dockerfile.dev .'  => image_id = 93f09e243598592
+  # 'docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app 93f09e243598592'
+  web:
+    #the next line is a fix for react-app bug in docker-compose. Apparently not required anymore
+    #stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
